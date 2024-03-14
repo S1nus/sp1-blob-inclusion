@@ -6,6 +6,6 @@ edition = "2021"
 
 [dependencies]
 sp1-zkvm = { git = "https://github.com/succinctlabs/sp1.git" }
-nmt-rs = {path = "../../nmt-rs", features=["serde"]}
-celestia-types = {path = "../../lumina/types"}
+nmt-rs = { git = "https://github.com/S1nus/nmt-rs.git" }
+celestia-types = { git = "https://github.com/S1nus/lumina.git", branch = "connor/index-field" }
 serde = { version = "1.0.164", features = ["derive"] }
