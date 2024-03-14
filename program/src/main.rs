@@ -32,16 +32,12 @@ pub fn main() {
 
     // Read proof
     let proof: celestia_types::nmt::NamespaceProof = sp1_zkvm::io::read();
-
-    let mut shares = [[0u8; 512]; 24];
+    let mut leaves = [[0u8; 512]; 24];
     for i in 0..24 {
-        sp1_zkvm::io::read_slice(&mut shares[i]);
+        sp1_zkvm::io::read_slice(&mut leaves[i]);
     }
-
-    println!("{:?} {:?} {:?} {:?}", root, namespace, proof, shares);
-    // let result = proof.verify_range(&root, &shares, namespace);
-    sp1_zkvm::io::write(&true);
-    //sp1_zkvm::io::write(&true);
+    let result = proof.verify_range(&root, &leaves, namespace.into_inner());
+    sp1_zkvm::io::write(&result.is_ok());
 
     /*let n = sp1_zkvm::io::read::<u32>();
     let mut a: u128 = 0;

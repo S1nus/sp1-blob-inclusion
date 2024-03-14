@@ -41,17 +41,34 @@ fn main() {
     stdin.write(&row_roots[0]);
     stdin.write(&my_namespace);
     stdin.write(&proofs[0]);
+
+    /*let mut shares = [[0u8; 512]; 24];
     for i in 0..24 {
+        shares[i] = blob.data[i * 512..(i + 1) * 512].try_into().unwrap();
         stdin.write_slice(blob.data[i * 512..(i + 1) * 512].as_ref());
+    }*/
+
+    let shares = blob.to_shares().expect("Failed to split blob to shares");
+    let leaf_hashes: Vec<_> = shares.iter().map(|share| share.as_ref()).collect();
+    for i in 0..24 {
+        println!("{:?}", leaf_hashes[i].len());
+        stdin.write_slice(leaf_hashes[i]);
     }
+
     /*for i in 0..256 {
         stdin.write_slice(blob.data[i*512..(i+1)*512].as_ref());
     }*/
+
+    let result =
+        proofs[0].verify_range(&row_roots[0], &leaf_hashes[..24], my_namespace.into_inner());
+    println!("result: {}", result.is_ok());
+
     let mut proof = SP1Prover::prove(ELF, stdin).expect("proving failed");
     let result = proof.stdout.read::<bool>();
     println!("result: {}", result);
     SP1Verifier::verify(ELF, &proof).expect("verification failed");
-    println!("succesfully generated and verified proof for the program!")
+    println!("succesfully generated and verified proof for the program!");
+
     /*SP1Verifier::verify(ELF, &proof).expect("verification failed");*/
     /*
     // Generate proof.
