@@ -7,7 +7,7 @@ use nmt_rs::{
     NamespaceId,
 };
 
-use celestia_types::nmt::NamespaceProof;
+use celestia_types::Blob;
 use serde::de::{self, Deserialize, Deserializer, SeqAccess, Visitor};
 use std::fmt;
 
@@ -16,24 +16,35 @@ pub fn main() {
     // resulting in output that doesn't match fibonacci sequence.
     // However, the resulting proof will still be valid!
 
-    // read row root
-    let root = sp1_zkvm::io::read::<NamespacedHash<29>>();
+    // Read shares
+    /*let mut shares: Vec<[u8; 512]> = Vec::new();
+    let mut buf = [0u8; 512];
+    for _ in 0..24 {
+        sp1_zkvm::io::read_slice(&mut buf);
+        shares.push(buf.clone());
+    };*/
+
+    let mut shares = [[0u8; 512]; 24];
+    for i in 0..24 {
+        sp1_zkvm::io::read_slice(&mut shares[i]);
+    }
+
+    // Read blob
+    //let blob: Blob = sp1_zkvm::io::read();
+
+    // Read proof
+    let proof: celestia_types::nmt::NamespaceProof = sp1_zkvm::io::read();
+
     // read namespace ID
     let namespace = sp1_zkvm::io::read::<NamespaceId<29>>();
 
-    // Read shares
-    let mut shares: Vec<[u8; 512]> = Vec::new();
-    let mut buf = [0u8; 512];
-    for _ in 0..256 {
-        sp1_zkvm::io::read_slice(&mut buf);
-        shares.push(buf.clone());
-    };
+    // read row root
+    let root = sp1_zkvm::io::read::<NamespacedHash<29>>();
 
-    // Read proof
-    let proof = sp1_zkvm::io::read::<NamespaceProof>();
 
     let result = proof.verify_range(&root, &shares, namespace);
     sp1_zkvm::io::write(&result.is_ok());
+    //sp1_zkvm::io::write(&true);
 
     /*let n = sp1_zkvm::io::read::<u32>();
     let mut a: u128 = 0;

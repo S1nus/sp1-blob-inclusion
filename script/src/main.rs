@@ -35,20 +35,25 @@ fn main() {
     let mut stdin = SP1Stdin::new();
     stdin.write(&row_roots[0]);
     stdin.write(&my_namespace);
-    for i in 0..256 {
+    stdin.write(&proofs[0]);
+    for i in 0..24 {
         stdin.write_slice(blob.data[i*512..(i+1)*512].as_ref());
     }
-    stdin.write(&proofs[0]);
-    let mut proof = SP1Prover::execute(ELF, stdin).expect("execution failed");
-    let result = proof.read::<bool>();
+    /*for i in 0..256 {
+        stdin.write_slice(blob.data[i*512..(i+1)*512].as_ref());
+    }*/
+    let mut proof = SP1Prover::prove(ELF, stdin).expect("proving failed");
+    let result = proof.stdout.read::<bool>();
     println!("result: {}", result);
+    SP1Verifier::verify(ELF, &proof).expect("verification failed");
+    println!("succesfully generated and verified proof for the program!")
     /*SP1Verifier::verify(ELF, &proof).expect("verification failed");*/
     /*
     // Generate proof.
     let mut stdin = SP1Stdin::new();
     let n = 186u32;
     stdin.write(&n);
-    let mut proof = SP1Prover::prove(ELF, stdin).expect("proving failed");
+    let mut proof = SP1Prover::prove(ELF, st0din).expect("proving failed");
 
     // Read output.
     let a = proof.stdout.read::<u128>();

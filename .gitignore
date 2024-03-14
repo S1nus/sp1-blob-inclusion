@@ -14,3 +14,5 @@ pgo-data.profdata
 # Proofs
 **/proof-with-pis.json
 **/proof-with-io.json
+
+program/elf/riscv32im-succinct-zkvm-elf
