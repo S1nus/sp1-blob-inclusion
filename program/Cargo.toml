@@ -1,0 +1,11 @@
+[workspace]
+[package]
+version = "0.1.0"
+name = "blobsp1-program"
+edition = "2021"
+
+[dependencies]
+sp1-zkvm = { git = "https://github.com/succinctlabs/sp1.git" }
+nmt-rs = {path = "../../nmt-rs", features=["serde"]}
+celestia-types = {path = "../../lumina/types"}
+serde = { version = "1.0.164", features = ["derive"] }
