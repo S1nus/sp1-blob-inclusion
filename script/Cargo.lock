@@ -400,9 +400,9 @@ dependencies = [
 
 [[package]]
 name = "blake3"
-version = "1.5.0"
+version = "1.5.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0231f06152bf547e9c2b5194f247cd97aacf6dcd8b15d8e5ec0663f64580da87"
+checksum = "30cca6d3674597c30ddf2c587bf8d9d65c9a84d2326d941cc79c9842dfe0ef52"
 dependencies = [
  "arrayref",
  "arrayvec",
@@ -421,8 +421,10 @@ source = "git+https://github.com/sp1-patches/BLAKE3.git?branch=patch-blake3_zkvm
 name = "blobsp1-script"
 version = "0.1.0"
 dependencies = [
+ "bincode",
  "celestia-rpc",
  "celestia-types",
+ "nmt-rs",
  "serde_json",
  "sp1-core",
 ]
@@ -448,6 +450,7 @@ dependencies = [
 [[package]]
 name = "blockstore"
 version = "0.1.0"
+source = "git+https://github.com/S1nus/lumina.git?branch=connor/index-field#e4a33be360a5e09086ff8631385540d5d8e119ef"
 dependencies = [
  "async-trait",
  "cid",
@@ -501,6 +504,7 @@ checksum = "8cd6604a82acf3039f1144f54b8eb34e91ffba622051189e71b781822d5ee1f5"
 [[package]]
 name = "celestia-proto"
 version = "0.1.0"
+source = "git+https://github.com/S1nus/lumina.git?branch=connor/index-field#e4a33be360a5e09086ff8631385540d5d8e119ef"
 dependencies = [
  "anyhow",
  "prost",
@@ -513,6 +517,7 @@ dependencies = [
 [[package]]
 name = "celestia-rpc"
 version = "0.1.0"
+source = "git+https://github.com/S1nus/lumina.git?branch=connor/index-field#e4a33be360a5e09086ff8631385540d5d8e119ef"
 dependencies = [
  "async-trait",
  "celestia-types",
@@ -526,6 +531,7 @@ dependencies = [
 [[package]]
 name = "celestia-types"
 version = "0.1.0"
+source = "git+https://github.com/S1nus/lumina.git?branch=connor/index-field#e4a33be360a5e09086ff8631385540d5d8e119ef"
 dependencies = [
  "base64 0.21.7",
  "bech32",
@@ -1803,6 +1809,7 @@ checksum = "e5ce46fe64a9d73be07dcbe690a38ce1b293be448fd8ce1e6c1b8062c9f72c6a"
 [[package]]
 name = "nmt-rs"
 version = "0.1.0"
+source = "git+https://github.com/S1nus/nmt-rs.git#9347da709229a985b9a8594b5b368dff244ffdfc"
 dependencies = [
  "bytes",
  "serde",
@@ -3110,7 +3117,7 @@ dependencies = [
 [[package]]
 name = "sp1-core"
 version = "0.1.0"
-source = "git+https://github.com/succinctlabs/sp1.git#4528b7861c60ef5e25c2d0b328fc6d244e2ac98e"
+source = "git+https://github.com/succinctlabs/sp1.git#5c8b2e3e1fe3c59340ff0591439fe1f9ceda6eaf"
 dependencies = [
  "anyhow",
  "bincode",
@@ -3169,7 +3176,7 @@ dependencies = [
 [[package]]
 name = "sp1-derive"
 version = "0.1.0"
-source = "git+https://github.com/succinctlabs/sp1.git#4528b7861c60ef5e25c2d0b328fc6d244e2ac98e"
+source = "git+https://github.com/succinctlabs/sp1.git#5c8b2e3e1fe3c59340ff0591439fe1f9ceda6eaf"
 dependencies = [
  "proc-macro2",
  "quote",

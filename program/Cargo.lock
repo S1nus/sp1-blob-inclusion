@@ -23,9 +23,9 @@ dependencies = [
 
 [[package]]
 name = "anyhow"
-version = "1.0.80"
+version = "1.0.81"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5ad32ce52e4161730f7098c077cd2ed6229b5804ccf99e5366be1ab72a98b4e1"
+checksum = "0952808a6c2afd1aa8947271f3a60f1a6763c7b912d210184c5149b5cf147247"
 
 [[package]]
 name = "ark-ff"
@@ -285,6 +285,7 @@ dependencies = [
 [[package]]
 name = "blockstore"
 version = "0.1.0"
+source = "git+https://github.com/S1nus/lumina.git?branch=connor/index-field#e4a33be360a5e09086ff8631385540d5d8e119ef"
 dependencies = [
  "async-trait",
  "cid",
@@ -326,6 +327,7 @@ dependencies = [
 [[package]]
 name = "celestia-proto"
 version = "0.1.0"
+source = "git+https://github.com/S1nus/lumina.git?branch=connor/index-field#e4a33be360a5e09086ff8631385540d5d8e119ef"
 dependencies = [
  "anyhow",
  "prost",
@@ -338,6 +340,7 @@ dependencies = [
 [[package]]
 name = "celestia-types"
 version = "0.1.0"
+source = "git+https://github.com/S1nus/lumina.git?branch=connor/index-field#e4a33be360a5e09086ff8631385540d5d8e119ef"
 dependencies = [
  "base64",
  "bech32",
@@ -1058,6 +1061,7 @@ checksum = "e5ce46fe64a9d73be07dcbe690a38ce1b293be448fd8ce1e6c1b8062c9f72c6a"
 [[package]]
 name = "nmt-rs"
 version = "0.1.0"
+source = "git+https://github.com/S1nus/nmt-rs.git#9347da709229a985b9a8594b5b368dff244ffdfc"
 dependencies = [
  "bytes",
  "serde",
@@ -1262,9 +1266,9 @@ dependencies = [
 
 [[package]]
 name = "proc-macro2"
-version = "1.0.78"
+version = "1.0.79"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e2422ad645d89c99f8f3e6b88a9fdeca7fabeac836b1002371c4367c8f984aae"
+checksum = "e835ff2298f5721608eb1a980ecaee1aef2c132bf95ecc026a11b7bf3c01c02e"
 dependencies = [
  "unicode-ident",
 ]
@@ -1681,7 +1685,7 @@ checksum = "e6ecd384b10a64542d77071bd64bd7b231f4ed5940fba55e98c3de13824cf3d7"
 [[package]]
 name = "sp1-precompiles"
 version = "0.1.0"
-source = "git+https://github.com/succinctlabs/sp1.git#04cb19bf549da2016b6b530f515c99350b886f86"
+source = "git+https://github.com/succinctlabs/sp1.git#5c8b2e3e1fe3c59340ff0591439fe1f9ceda6eaf"
 dependencies = [
  "anyhow",
  "bincode",
@@ -1695,7 +1699,7 @@ dependencies = [
 [[package]]
 name = "sp1-zkvm"
 version = "0.1.0"
-source = "git+https://github.com/succinctlabs/sp1.git#04cb19bf549da2016b6b530f515c99350b886f86"
+source = "git+https://github.com/succinctlabs/sp1.git#5c8b2e3e1fe3c59340ff0591439fe1f9ceda6eaf"
 dependencies = [
  "bincode",
  "cfg-if",

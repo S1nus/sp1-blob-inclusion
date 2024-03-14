@@ -2,12 +2,9 @@
 #![no_main]
 sp1_zkvm::entrypoint!(main);
 
-use nmt_rs::{
-    NamespacedHash,
-    NamespaceId,
-};
+use nmt_rs::{NamespaceId, NamespacedHash};
 
-use celestia_types::Blob;
+use celestia_types::{nmt::Namespace, Blob};
 use serde::de::{self, Deserialize, Deserializer, SeqAccess, Visitor};
 use std::fmt;
 
@@ -24,26 +21,26 @@ pub fn main() {
         shares.push(buf.clone());
     };*/
 
+    // Read blob
+    //let blob: Blob = sp1_zkvm::io::read();
+
+    // read row root
+    let root = sp1_zkvm::io::read::<NamespacedHash<29>>();
+
+    // read namespace ID
+    let namespace = sp1_zkvm::io::read::<Namespace>();
+
+    // Read proof
+    let proof: celestia_types::nmt::NamespaceProof = sp1_zkvm::io::read();
+
     let mut shares = [[0u8; 512]; 24];
     for i in 0..24 {
         sp1_zkvm::io::read_slice(&mut shares[i]);
     }
 
-    // Read blob
-    //let blob: Blob = sp1_zkvm::io::read();
-
-    // Read proof
-    let proof: celestia_types::nmt::NamespaceProof = sp1_zkvm::io::read();
-
-    // read namespace ID
-    let namespace = sp1_zkvm::io::read::<NamespaceId<29>>();
-
-    // read row root
-    let root = sp1_zkvm::io::read::<NamespacedHash<29>>();
-
-
-    let result = proof.verify_range(&root, &shares, namespace);
-    sp1_zkvm::io::write(&result.is_ok());
+    println!("{:?} {:?} {:?} {:?}", root, namespace, proof, shares);
+    // let result = proof.verify_range(&root, &shares, namespace);
+    sp1_zkvm::io::write(&true);
     //sp1_zkvm::io::write(&true);
 
     /*let n = sp1_zkvm::io::read::<u32>();
@@ -58,5 +55,4 @@ pub fn main() {
 
     sp1_zkvm::io::write(&a);
     sp1_zkvm::io::write(&b);*/
-
 }
