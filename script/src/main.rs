@@ -35,11 +35,12 @@ fn main() {
 
     let mut stdin = SP1Stdin::new();
 
-    stdin.write(&(square_size / 2));
-    stdin.write(&(last_row_index as u32 - first_row_index as u32));
-    stdin.write(&my_namespace);
     let shares = blob.to_shares().expect("Failed to split blob to shares");
     let leaf_hashes: Vec<_> = shares.iter().map(|share| share.as_ref()).collect();
+
+    stdin.write(&(leaf_hashes.len() as u32));
+    stdin.write(&(last_row_index as u32 - first_row_index as u32));
+    stdin.write(&my_namespace);
     println!("len leaf_hashes: {}", leaf_hashes.len());
     println!("size of leaf_hash: {}", leaf_hashes[0].len());
     leaf_hashes.iter().for_each(|hash| stdin.write_slice(hash));

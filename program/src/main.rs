@@ -13,18 +13,15 @@ pub fn main() {
     // resulting in output that doesn't match fibonacci sequence.
     // However, the resulting proof will still be valid!
 
-    // read original data square (ODS) size
-    let ods_size: u32 = sp1_zkvm::io::read();
+    const NUM_LEAVES: u32 = 272;
     // read num rows
     let num_rows: u32 = sp1_zkvm::io::read();
     // read namespace ID
     let namespace = sp1_zkvm::io::read::<Namespace>();
 
-    // read leaves
-    const num_leaves: usize = 272;
-    let mut leaves = [[0u8; 512]; num_leaves];
-    for i in 0..num_leaves {
-        sp1_zkvm::io::read_slice(&mut leaves[i]);
+    let mut leaves = [[0u8; 512]; NUM_LEAVES as usize];
+    for i in 0..NUM_LEAVES {
+        sp1_zkvm::io::read_slice(&mut leaves[i as usize]);
     }
 
     let mut start = 0;
@@ -42,35 +39,4 @@ pub fn main() {
     }
 
     sp1_zkvm::io::write(&true);
-    // do middle rows
-
-    /*for i in 0..num_rows {
-        // read row root
-        let root = sp1_zkvm::io::read::<NamespacedHash<29>>();
-        // read proof
-        let proof: celestia_types::nmt::NamespaceProof = sp1_zkvm::io::read();
-        let result = proof.verify_range(
-            &root,
-            &leaves[..(proof.end_idx() as usize - proof.start_idx() as usize)],
-            namespace.into_inner(),
-        );
-        if result.is_err() {
-            sp1_zkvm::io::write(&false);
-            return;
-        }
-    }*/
-    //sp1_zkvm::io::write(&true);
-
-    /*let n = sp1_zkvm::io::read::<u32>();
-    let mut a: u128 = 0;
-    let mut b: u128 = 1;
-    let mut sum: u128;
-    for _ in 1..n {
-        sum = a + b;
-        a = b;
-        b = sum;
-    }
-
-    sp1_zkvm::io::write(&a);
-    sp1_zkvm::io::write(&b);*/
 }
