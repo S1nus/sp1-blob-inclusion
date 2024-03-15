@@ -38,7 +38,6 @@ fn main() {
     let shares = blob.to_shares().expect("Failed to split blob to shares");
     let leaf_hashes: Vec<_> = shares.iter().map(|share| share.as_ref()).collect();
 
-    stdin.write(&(leaf_hashes.len() as u32));
     stdin.write(&(last_row_index as u32 - first_row_index as u32));
     stdin.write(&my_namespace);
     println!("len leaf_hashes: {}", leaf_hashes.len());
