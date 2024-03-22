@@ -1,6 +1,8 @@
 //! A simple script to generate and verify the proof of a given program.
 
+use celestia_types::nmt::NamespacedHashExt;
 use celestia_types::{nmt::Namespace, Blob, Commitment, ExtendedHeader};
+use nmt_rs::row_inclusion;
 use sp1_core::{SP1Prover, SP1Stdin, SP1Verifier};
 use std::fs::File;
 use std::io::prelude::*;
@@ -12,7 +14,28 @@ fn main() {
 
     let header_bytes = std::fs::read("header.dat").unwrap();
     let dah = ExtendedHeader::decode_and_validate(&header_bytes).unwrap();
-    let row_roots = dah.dah.row_roots;
+    let row_roots = &dah.dah.row_roots;
+    let col_roots = &dah.dah.column_roots;
+    let row_and_col_leaves: Vec<_> = dah
+        .dah
+        .row_roots
+        .iter()
+        .chain(dah.dah.column_roots.iter())
+        .map(|root| root.to_array())
+        .collect();
+    let (computed_root_hash, row_inclusion_proofs) = row_inclusion::proofs_from_byte_slices(
+        &row_and_col_leaves
+            .iter()
+            .map(|leaf| leaf.as_ref())
+            .collect::<Vec<_>>()[..],
+    );
+    println!("just for fun, let's verify them all.");
+    for proof in row_inclusion_proofs.iter() {
+        println!(
+            "proof valid: {}",
+            proof.verify(dah.dah.hash().as_bytes().try_into().unwrap())
+        );
+    }
 
     let blob_bytes = std::fs::read("blob.dat").unwrap();
     let mut blob = Blob::new(my_namespace, blob_bytes).unwrap();
@@ -38,6 +61,7 @@ fn main() {
     let shares = blob.to_shares().expect("Failed to split blob to shares");
     let leaf_hashes: Vec<_> = shares.iter().map(|share| share.as_ref()).collect();
 
+    stdin.write_slice(&dah.dah.hash().as_bytes());
     stdin.write(&(last_row_index as u32 - first_row_index as u32));
     stdin.write(&my_namespace);
     println!("len leaf_hashes: {}", leaf_hashes.len());
@@ -48,6 +72,7 @@ fn main() {
     for i in first_row_index..last_row_index {
         println!("i: {}", i);
         stdin.write(&row_roots[i as usize]);
+        stdin.write(&row_inclusion_proofs[i as usize]);
         stdin.write(&proofs[i as usize]);
     }
 

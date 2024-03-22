@@ -285,7 +285,6 @@ dependencies = [
 [[package]]
 name = "blockstore"
 version = "0.1.0"
-source = "git+https://github.com/S1nus/lumina.git?branch=connor/index-field#e4a33be360a5e09086ff8631385540d5d8e119ef"
 dependencies = [
  "async-trait",
  "cid",
@@ -327,7 +326,6 @@ dependencies = [
 [[package]]
 name = "celestia-proto"
 version = "0.1.0"
-source = "git+https://github.com/S1nus/lumina.git?branch=connor/index-field#e4a33be360a5e09086ff8631385540d5d8e119ef"
 dependencies = [
  "anyhow",
  "prost",
@@ -340,7 +338,6 @@ dependencies = [
 [[package]]
 name = "celestia-types"
 version = "0.1.0"
-source = "git+https://github.com/S1nus/lumina.git?branch=connor/index-field#e4a33be360a5e09086ff8631385540d5d8e119ef"
 dependencies = [
  "base64",
  "bech32",
@@ -1061,11 +1058,11 @@ checksum = "e5ce46fe64a9d73be07dcbe690a38ce1b293be448fd8ce1e6c1b8062c9f72c6a"
 [[package]]
 name = "nmt-rs"
 version = "0.1.0"
-source = "git+https://github.com/S1nus/nmt-rs.git#9347da709229a985b9a8594b5b368dff244ffdfc"
 dependencies = [
  "bytes",
  "serde",
  "sha2 0.10.8 (git+https://github.com/sp1-patches/RustCrypto-hashes.git)",
+ "thiserror",
 ]
 
 [[package]]

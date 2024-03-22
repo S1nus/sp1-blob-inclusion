@@ -2,6 +2,7 @@
 #![no_main]
 sp1_zkvm::entrypoint!(main);
 
+use nmt_rs::row_inclusion::Proof as RowInclusionProof;
 use nmt_rs::{simple_merkle::proof, NamespaceId, NamespacedHash};
 
 use celestia_types::{nmt::Namespace, Blob};
@@ -14,6 +15,9 @@ pub fn main() {
     // However, the resulting proof will still be valid!
 
     const NUM_LEAVES: u32 = 272;
+
+    let mut data_root = [0u8; 32 as usize];
+    sp1_zkvm::io::read_slice(&mut data_root);
     // read num rows
     let num_rows: u32 = sp1_zkvm::io::read();
     // read namespace ID
@@ -27,6 +31,11 @@ pub fn main() {
     let mut start = 0;
     for i in 0..(num_rows as usize) {
         let root = sp1_zkvm::io::read::<NamespacedHash<29>>();
+        let row_inclusion_proof = sp1_zkvm::io::read::<RowInclusionProof>();
+        if !row_inclusion_proof.verify(data_root) {
+            sp1_zkvm::io::write(&false);
+            return;
+        }
         let proof: celestia_types::nmt::NamespaceProof = sp1_zkvm::io::read();
         let end = start + (proof.end_idx() as usize - proof.start_idx() as usize);
         let result = proof.verify_range(&root, &leaves[start..end], namespace.into_inner());
