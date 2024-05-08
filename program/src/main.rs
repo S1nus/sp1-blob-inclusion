@@ -3,49 +3,64 @@
 sp1_zkvm::entrypoint!(main);
 
 use nmt_rs::row_inclusion::Proof as RowInclusionProof;
+use nmt_rs::simple_merkle::proof::Proof;
+use nmt_rs::TmSha2Hasher;
 use nmt_rs::{simple_merkle::proof, NamespaceId, NamespacedHash};
 
+use celestia_types::nmt::NamespaceProof;
 use celestia_types::{nmt::Namespace, Blob};
 use serde::de::{self, Deserialize, Deserializer, SeqAccess, Visitor};
 use std::fmt;
 
 pub fn main() {
-    // NOTE: values of n larger than 186 will overflow the u128 type,
-    // resulting in output that doesn't match fibonacci sequence.
-    // However, the resulting proof will still be valid!
-
-    const NUM_LEAVES: u32 = 272;
-
+    // read the data root
     let mut data_root = [0u8; 32 as usize];
     sp1_zkvm::io::read_slice(&mut data_root);
     // read num rows
     let num_rows: u32 = sp1_zkvm::io::read();
+    // read blob size
+    let blob_size: u32 = sp1_zkvm::io::read();
     // read namespace ID
     let namespace = sp1_zkvm::io::read::<Namespace>();
-
-    let mut leaves = [[0u8; 512]; NUM_LEAVES as usize];
-    for i in 0..NUM_LEAVES {
-        sp1_zkvm::io::read_slice(&mut leaves[i as usize]);
+    // read the row-inclusion range proof
+    let range_proof: Proof<TmSha2Hasher> = sp1_zkvm::io::read();
+    // read the row roots
+    let mut row_roots = vec![];
+    for i in 0..num_rows {
+        row_roots.push(sp1_zkvm::io::read::<NamespacedHash<29>>());
+    }
+    // read each share of the blob
+    let mut shares = vec![];
+    for i in 0..blob_size {
+        shares.push(sp1_zkvm::io::read::<[u8; 512]>());
+    }
+    // for each row spanned by the blob, we have a NMT range proof
+    let mut proofs = vec![];
+    for i in 0..num_rows {
+        proofs.push(sp1_zkvm::io::read::<NamespaceProof>());
     }
 
+    // We have one NMT range proof for each row spanned by the blob
+    // Verify that the blob's shares go into the respective row roots
     let mut start = 0;
-    for i in 0..(num_rows as usize) {
-        let root = sp1_zkvm::io::read::<NamespacedHash<29>>();
-        let row_inclusion_proof = sp1_zkvm::io::read::<RowInclusionProof>();
-        if !row_inclusion_proof.verify(data_root) {
-            sp1_zkvm::io::write(&false);
-            return;
-        }
-        let proof: celestia_types::nmt::NamespaceProof = sp1_zkvm::io::read();
+    for i in 0..num_rows {
+        let proof = &proofs[i];
+        let root = &row_roots[i];
         let end = start + (proof.end_idx() as usize - proof.start_idx() as usize);
-        let result = proof.verify_range(&root, &leaves[start..end], namespace.into_inner());
-        println!("row {} result: {}", i, result.is_ok());
-        start = end;
+        let result = proof.verify_range(&root, &shares[start..end], namespace.into());
         if result.is_err() {
             sp1_zkvm::io::write(&false);
             return;
         }
+        start = end;
     }
 
+    // Verify the row-inclusion range proof
+    let blob_row_root_hashes: Vec<[u8; 32]> = row_roots.iter().map(|root| root.hash()).collect();
+    let result = range_proof.verify_range(&data_root, &blob_row_root_hashes);
+    if result.is_err() {
+        sp1_zkvm::io::write(&false);
+        return;
+    }
     sp1_zkvm::io::write(&true);
 }
