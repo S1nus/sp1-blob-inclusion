@@ -1,13 +1,15 @@
 use celestia_types::hash::Hash;
 use celestia_types::nmt::NamespacedHashExt;
 use celestia_types::{nmt::Namespace, Blob, Commitment, ExtendedHeader};
-use sp1_core::{SP1Prover, SP1Stdin, SP1Verifier};
+use sp1_sdk::{utils, ProverClient, SP1Stdin};
 use std::fs::File;
 use std::io::prelude::*;
 
 use nmt_rs::simple_merkle::db::MemDb;
 use nmt_rs::simple_merkle::tree::MerkleTree;
 use nmt_rs::{NamespacedHash, TmSha2Hasher};
+
+const ELF: &[u8] = include_bytes!("../../program/elf/riscv32im-succinct-zkvm-elf");
 
 fn main() {
     let my_namespace = Namespace::new_v0(&[1, 2, 3, 4, 5]).expect("Invalid namespace");
@@ -54,7 +56,7 @@ fn main() {
     let proofs: Vec<celestia_types::nmt::NamespaceProof> =
         serde_json::from_reader(proofs_file).unwrap();
     // For each row spanned by the blob, you should have one NMT range proof into a row root.
-    assert_eq!(proofs.len(), last_row_index - first_row_index);
+    assert_eq!(proofs.len(), last_row_index + 1 - first_row_index);
 
     let rp = tree.build_range_proof(first_row_index..last_row_index + 1);
 
@@ -82,4 +84,9 @@ fn main() {
     for proof in proofs {
         stdin.write(&proof);
     }
+
+    let mut public_values = ProverClient::execute(&ELF, stdin).unwrap();
+    println!("gnerated proof");
+    let result = public_values.read::<bool>();
+    println!("result: {}", result);
 }

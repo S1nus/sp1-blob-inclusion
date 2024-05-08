@@ -547,7 +547,7 @@ dependencies = [
  "serde_bytes",
  "serde_json",
  "serde_repr",
- "sha2 0.10.8",
+ "sha2 0.10.8 (registry+https://github.com/rust-lang/crates.io-index)",
  "signature",
  "subtle",
  "subtle-encoding",
@@ -595,7 +595,7 @@ dependencies = [
  "ruint",
  "serde",
  "serde_repr",
- "sha2 0.10.8",
+ "sha2 0.10.8 (git+https://github.com/S1nus/RustCrypto-hashes-zkvm.git)",
  "thiserror",
 ]
 
@@ -1711,7 +1711,7 @@ dependencies = [
  "ecdsa",
  "elliptic-curve",
  "once_cell",
- "sha2 0.10.8",
+ "sha2 0.10.8 (registry+https://github.com/rust-lang/crates.io-index)",
  "signature",
 ]
 
@@ -1754,7 +1754,7 @@ dependencies = [
  "hkdf",
  "multihash",
  "quick-protobuf",
- "sha2 0.10.8",
+ "sha2 0.10.8 (registry+https://github.com/rust-lang/crates.io-index)",
  "thiserror",
  "tracing",
 ]
@@ -1868,7 +1868,7 @@ version = "0.1.0"
 dependencies = [
  "bytes",
  "serde",
- "sha2 0.10.8",
+ "sha2 0.10.8 (git+https://github.com/S1nus/RustCrypto-hashes-zkvm.git)",
 ]
 
 [[package]]
@@ -3088,6 +3088,16 @@ name = "sha2"
 version = "0.10.8"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "793db75ad2bcafc3ffa7c68b215fee268f537982cd901d132f89c6343f3a3dc8"
+dependencies = [
+ "cfg-if",
+ "cpufeatures",
+ "digest 0.10.7",
+]
+
+[[package]]
+name = "sha2"
+version = "0.10.8"
+source = "git+https://github.com/S1nus/RustCrypto-hashes-zkvm.git#7dca6b3649e4c33be7a2209ff89fcd1a05ae333e"
 dependencies = [
  "cfg-if",
  "cpufeatures",

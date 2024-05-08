@@ -2,7 +2,6 @@
 #![no_main]
 sp1_zkvm::entrypoint!(main);
 
-use nmt_rs::row_inclusion::Proof as RowInclusionProof;
 use nmt_rs::simple_merkle::proof::Proof;
 use nmt_rs::TmSha2Hasher;
 use nmt_rs::{simple_merkle::proof, NamespaceId, NamespacedHash};
@@ -32,7 +31,9 @@ pub fn main() {
     // read each share of the blob
     let mut shares = vec![];
     for i in 0..blob_size {
-        shares.push(sp1_zkvm::io::read::<[u8; 512]>());
+        let mut slice = [0u8; 512];
+        sp1_zkvm::io::read_slice(&mut slice);
+        shares.push(slice);
     }
     // for each row spanned by the blob, we have a NMT range proof
     let mut proofs = vec![];
@@ -44,8 +45,8 @@ pub fn main() {
     // Verify that the blob's shares go into the respective row roots
     let mut start = 0;
     for i in 0..num_rows {
-        let proof = &proofs[i];
-        let root = &row_roots[i];
+        let proof = &proofs[i as usize];
+        let root = &row_roots[i as usize];
         let end = start + (proof.end_idx() as usize - proof.start_idx() as usize);
         let result = proof.verify_range(&root, &shares[start..end], namespace.into());
         if result.is_err() {
