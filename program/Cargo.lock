@@ -249,7 +249,7 @@ version = "0.1.0"
 dependencies = [
  "bincode",
  "celestia-types",
- "nmt-rs",
+ "nmt-rs 0.1.0",
  "serde",
  "sp1-zkvm",
 ]
@@ -391,11 +391,11 @@ dependencies = [
  "libp2p-identity",
  "multiaddr",
  "multihash",
- "nmt-rs",
+ "nmt-rs 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "ruint",
  "serde",
  "serde_repr",
- "sha2 0.10.8 (git+https://github.com/S1nus/RustCrypto-hashes-zkvm.git)",
+ "sha2 0.10.8 (registry+https://github.com/rust-lang/crates.io-index)",
  "thiserror",
 ]
 
@@ -1123,6 +1123,16 @@ dependencies = [
  "bytes",
  "serde",
  "sha2 0.10.8 (git+https://github.com/S1nus/RustCrypto-hashes-zkvm.git)",
+]
+
+[[package]]
+name = "nmt-rs"
+version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e787133eafbd0f386dc4e26828a50f7595d6d7213ea0e8244c1ca6b9a9648c30"
+dependencies = [
+ "bytes",
+ "sha2 0.10.8 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
