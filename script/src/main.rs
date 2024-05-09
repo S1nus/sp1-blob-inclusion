@@ -85,7 +85,8 @@ fn main() {
         stdin.write(&proof);
     }
 
-    let mut public_values = ProverClient::execute(&ELF, stdin).unwrap();
+    let prover_client = ProverClient::new();
+    let mut public_values = prover_client.execute(&ELF, stdin).unwrap();
     println!("gnerated proof");
     let result = public_values.read::<bool>();
     println!("result: {}", result);
