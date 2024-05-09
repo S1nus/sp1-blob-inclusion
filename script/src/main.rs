@@ -6,7 +6,7 @@ use std::fs::File;
 use std::io::prelude::*;
 
 use nmt_rs::simple_merkle::db::MemDb;
-use nmt_rs::simple_merkle::tree::MerkleTree;
+use nmt_rs::simple_merkle::tree::{MerkleHash, MerkleTree};
 use nmt_rs::{NamespacedHash, TmSha2Hasher};
 
 const ELF: &[u8] = include_bytes!("../../program/elf/riscv32im-succinct-zkvm-elf");
@@ -44,7 +44,7 @@ fn main() {
     blob.index = Some(8);
 
     let shares = blob.to_shares().expect("Failed to split blob to shares");
-    let share_values: Vec<_> = shares.iter().map(|share| share.as_ref()).collect();
+    let share_values: Vec<[u8; 512]> = shares.iter().map(|share| share.data).collect();
 
     let blob_index: usize = blob.index.unwrap().try_into().unwrap();
     let blob_size: usize = blob.data.len() / 512;
@@ -58,26 +58,26 @@ fn main() {
     // For each row spanned by the blob, you should have one NMT range proof into a row root.
     assert_eq!(proofs.len(), last_row_index + 1 - first_row_index);
 
-    let rp = tree.build_range_proof(first_row_index..last_row_index + 1);
+    let rp = tree.build_range_proof(first_row_index..last_row_index);
 
     let mut stdin = SP1Stdin::new();
     // write the DA header
-    stdin.write_slice(&dah.dah.hash().as_bytes());
+    stdin.write_vec(dah.dah.hash().as_bytes().to_vec());
     // write "num rows" spanned by the blob
     stdin.write(&(last_row_index as u32 - first_row_index as u32));
     // write num shares
-    stdin.write(&(blob_size as u32));
+    stdin.write(&share_values.len());
     // write namespace
     stdin.write(&my_namespace);
     // write the range proof
     stdin.write(&rp);
     // write the row roots
-    for row_root in eds_row_roots[first_row_index..last_row_index + 1].iter() {
+    for row_root in eds_row_roots[first_row_index..last_row_index].iter() {
         stdin.write(&row_root);
     }
     // write the shares
-    for s in share_values {
-        stdin.write_slice(s);
+    for share in share_values {
+        stdin.write_vec(share.to_vec());
     }
 
     // write the proofs {
@@ -86,6 +86,7 @@ fn main() {
     }
 
     let prover_client = ProverClient::new();
+    prover_client.setup(ELF);
     let mut public_values = prover_client.execute(&ELF, stdin).unwrap();
     println!("gnerated proof");
     let result = public_values.read::<bool>();

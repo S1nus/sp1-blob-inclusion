@@ -6,7 +6,7 @@ edition = "2021"
 
 [dependencies]
 #sp1-sdk = { git = "https://github.com/succinctlabs/sp1.git" }
-sp1-sdk = {path = "../../sp1/sdk"}
+sp1-sdk = { git = "https://github.com/succinctlabs/sp1.git", rev = "v1.0.0-testnet" }
 celestia-rpc = {path = "../../upstream-lumina/rpc"}
 celestia-types = {path = "../../upstream-lumina/types"}
 serde_json = "1.0.114"

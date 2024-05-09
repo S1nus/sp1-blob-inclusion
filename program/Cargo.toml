@@ -5,9 +5,10 @@ name = "blobsp1-program"
 edition = "2021"
 
 [dependencies]
-sp1-zkvm = { git = "https://github.com/succinctlabs/sp1.git" }
+sp1-zkvm = { git = "https://github.com/succinctlabs/sp1.git", rev = "v1.0.0-testnet" }
 #nmt-rs = { git = "https://github.com/S1nus/nmt-rs.git" }
 nmt-rs = {path = "../../nmt-rs", features=["serde"]}
 #celestia-types = { git = "https://github.com/S1nus/lumina.git", branch = "connor/index-field" }
 celestia-types = {path = "../../upstream-lumina/types"}
 serde = { version = "1.0.164", features = ["derive"] }
+bincode = "1.3.3"
