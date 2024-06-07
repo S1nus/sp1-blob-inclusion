@@ -83,7 +83,7 @@ dependencies = [
  "alloy-rlp",
  "alloy-serde",
  "serde",
- "sha2 0.10.8 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sha2 0.10.8",
 ]
 
 [[package]]
@@ -939,7 +939,7 @@ dependencies = [
  "bincode",
  "celestia-rpc",
  "celestia-types",
- "nmt-rs 0.1.0",
+ "nmt-rs",
  "serde_json",
  "sp1-sdk",
 ]
@@ -1063,6 +1063,7 @@ dependencies = [
 [[package]]
 name = "celestia-proto"
 version = "0.2.0"
+source = "git+https://github.com/eigerco/lumina.git?rev=8094d04#8094d04b76e3f3c08667d654c8b6b5bb3fdeab33"
 dependencies = [
  "anyhow",
  "celestia-tendermint-proto",
@@ -1075,6 +1076,7 @@ dependencies = [
 [[package]]
 name = "celestia-rpc"
 version = "0.2.0"
+source = "git+https://github.com/eigerco/lumina.git?rev=8094d04#8094d04b76e3f3c08667d654c8b6b5bb3fdeab33"
 dependencies = [
  "async-trait",
  "celestia-types",
@@ -1106,7 +1108,7 @@ dependencies = [
  "serde_bytes",
  "serde_json",
  "serde_repr",
- "sha2 0.10.8 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sha2 0.10.8",
  "signature",
  "subtle",
  "subtle-encoding",
@@ -1135,6 +1137,7 @@ dependencies = [
 [[package]]
 name = "celestia-types"
 version = "0.2.0"
+source = "git+https://github.com/eigerco/lumina.git?rev=8094d04#8094d04b76e3f3c08667d654c8b6b5bb3fdeab33"
 dependencies = [
  "base64 0.21.7",
  "bech32",
@@ -1150,12 +1153,13 @@ dependencies = [
  "libp2p-identity",
  "multiaddr",
  "multihash",
- "nmt-rs 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "nmt-rs",
  "ruint",
  "serde",
  "serde_repr",
- "sha2 0.10.8 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sha2 0.10.8",
  "thiserror",
+ "time",
 ]
 
 [[package]]
@@ -2775,7 +2779,7 @@ dependencies = [
  "ecdsa",
  "elliptic-curve",
  "once_cell",
- "sha2 0.10.8 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sha2 0.10.8",
  "signature",
 ]
 
@@ -2852,7 +2856,7 @@ dependencies = [
  "hkdf",
  "multihash",
  "quick-protobuf",
- "sha2 0.10.8 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sha2 0.10.8",
  "thiserror",
  "tracing",
 ]
@@ -3061,20 +3065,11 @@ dependencies = [
 [[package]]
 name = "nmt-rs"
 version = "0.1.0"
+source = "git+https://github.com/Sovereign-Labs/nmt-rs.git?rev=ac03d7c#ac03d7c7620bab1e14256aa2fde8e425631a5278"
 dependencies = [
  "bytes",
  "serde",
- "sha2 0.10.8 (git+https://github.com/S1nus/RustCrypto-hashes-zkvm.git)",
-]
-
-[[package]]
-name = "nmt-rs"
-version = "0.1.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e787133eafbd0f386dc4e26828a50f7595d6d7213ea0e8244c1ca6b9a9648c30"
-dependencies = [
- "bytes",
- "sha2 0.10.8 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sha2 0.10.8",
 ]
 
 [[package]]
@@ -4675,16 +4670,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "sha2"
-version = "0.10.8"
-source = "git+https://github.com/S1nus/RustCrypto-hashes-zkvm.git#7dca6b3649e4c33be7a2209ff89fcd1a05ae333e"
-dependencies = [
- "cfg-if",
- "cpufeatures",
- "digest 0.10.7",
-]
-
-[[package]]
 name = "sha3"
 version = "0.10.8"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -4892,7 +4877,7 @@ dependencies = [
  "reqwest 0.11.27",
  "serde",
  "serde_json",
- "sha2 0.10.8 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sha2 0.10.8",
  "size",
  "sp1-core",
  "sp1-primitives",
@@ -5070,7 +5055,7 @@ dependencies = [
  "reqwest-middleware",
  "serde",
  "serde_json",
- "sha2 0.10.8 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sha2 0.10.8",
  "sp1-core",
  "sp1-prover",
  "tempfile",
@@ -6142,7 +6127,7 @@ dependencies = [
  "pasta_curves 0.5.1",
  "rand",
  "serde",
- "sha2 0.10.8 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sha2 0.10.8",
  "sha3",
  "subtle",
 ]

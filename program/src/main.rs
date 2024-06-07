@@ -52,7 +52,7 @@ pub fn main() {
         let proof = &proofs[i as usize];
         let root = &row_roots[i as usize];
         let end = start + (proof.end_idx() as usize - proof.start_idx() as usize);
-        let result = proof.verify_range(&root, &shares[start..end], namespace.into());
+        let result = proof.verify_range(root, &shares[start..end], namespace.into());
         if result.is_err() {
             sp1_zkvm::io::commit(&false);
             return;

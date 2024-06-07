@@ -249,7 +249,7 @@ version = "0.1.0"
 dependencies = [
  "bincode",
  "celestia-types",
- "nmt-rs",
+ "nmt-rs 0.1.0 (git+https://github.com/Sovereign-Labs/nmt-rs.git?rev=ac03d7c)",
  "serde",
  "sp1-zkvm",
 ]
@@ -393,7 +393,7 @@ dependencies = [
  "libp2p-identity",
  "multiaddr",
  "multihash",
- "nmt-rs",
+ "nmt-rs 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "ruint",
  "serde",
  "serde_repr",
@@ -495,7 +495,8 @@ dependencies = [
 [[package]]
 name = "curve25519-dalek-ng"
 version = "4.1.1"
-source = "git+https://github.com/sp1-patches/curve25519-dalek-ng.git#01f43665631d2c33385708d41d0c26dbb1baa0ea"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "1c359b7249347e46fb28804470d071c921156ad62b3eef5d34e2ba867533dec8"
 dependencies = [
  "byteorder",
  "digest 0.9.0",
@@ -632,7 +633,8 @@ dependencies = [
 [[package]]
 name = "ed25519-consensus"
 version = "2.1.0"
-source = "git+https://github.com/sp1-patches/ed25519-consensus?branch=patch-v2.1.0#59f16610526726fa5c96dd77ca792f821021b66e"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "3c8465edc8ee7436ffea81d21a019b16676ee3db267aa8d5a8d729581ecf998b"
 dependencies = [
  "curve25519-dalek-ng",
  "hex",
@@ -1116,6 +1118,16 @@ name = "multimap"
 version = "0.8.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e5ce46fe64a9d73be07dcbe690a38ce1b293be448fd8ce1e6c1b8062c9f72c6a"
+
+[[package]]
+name = "nmt-rs"
+version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e787133eafbd0f386dc4e26828a50f7595d6d7213ea0e8244c1ca6b9a9648c30"
+dependencies = [
+ "bytes",
+ "sha2 0.10.8",
+]
 
 [[package]]
 name = "nmt-rs"
@@ -1783,7 +1795,8 @@ dependencies = [
 [[package]]
 name = "sha2"
 version = "0.10.8"
-source = "git+https://github.com/sp1-patches/RustCrypto-hashes?branch=patch-v0.10.8#3d692aa90b91513886d757d01f8fc2d51c0ec0d7"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "793db75ad2bcafc3ffa7c68b215fee268f537982cd901d132f89c6343f3a3dc8"
 dependencies = [
  "cfg-if",
  "cpufeatures",
@@ -2321,8 +2334,3 @@ dependencies = [
  "quote",
  "syn 2.0.52",
 ]
-
-[[patch.unused]]
-name = "curve25519-dalek-ng"
-version = "4.1.1"
-source = "git+https://github.com/sp1-patches/curve25519-dalek-ng?branch=patch-v4.1.1#1e6069f81e4497d04a16b90001f0e61f3440f263"
