@@ -27,8 +27,8 @@ fn main() {
     // "Data root" is the merkle root of the EDS row and column roots
     let hasher = TmSha2Hasher {}; // Tendermint Sha2 hasher
     let mut tree: MerkleTree<MemDb<[u8; 32]>, TmSha2Hasher> = MerkleTree::with_hasher(hasher);
-    for leaf in data_tree_leaves {
-        tree.push_raw_leaf(&leaf);
+    for leaf in &data_tree_leaves {
+        tree.push_raw_leaf(leaf);
     }
     // Ensure that the data root is the merkle root of the EDS row and column roots
     assert_eq!(dah.dah.hash(), Hash::Sha256(tree.root()));
@@ -55,6 +55,20 @@ fn main() {
     // NMT range proofs, from leaves into row roots.
     let proofs: Vec<celestia_types::nmt::NamespaceProof> =
         serde_json::from_reader(proofs_file).unwrap();
+
+    println!("first_row: {:?}", eds_row_roots[first_row_index]);
+    println!("shares: {:?}", share_values);
+    let r = proofs[0].verify_range(
+        &eds_row_roots[first_row_index],
+        &share_values[proofs[0].start_idx() as usize..proofs[0].end_idx() as usize]
+            .iter()
+            .map(|x| x.to_vec())
+            .collect::<Vec<Vec<u8>>>(),
+        my_namespace.into(),
+    );
+    println!("success? {:?}", r);
+    return;
+
     // For each row spanned by the blob, you should have one NMT range proof into a row root.
     assert_eq!(proofs.len(), last_row_index + 1 - first_row_index);
 
