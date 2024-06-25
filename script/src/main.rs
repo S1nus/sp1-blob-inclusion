@@ -56,6 +56,10 @@ fn main() {
     let proofs: Vec<celestia_types::nmt::NamespaceProof> =
         serde_json::from_reader(proofs_file).unwrap();
 
+    /*
+       Explanation:
+       I'm currently trying to print values to test interop with solidity.
+    */
     println!("first_row: {:?}", eds_row_roots[first_row_index]);
     println!("shares: {:?}", share_values);
     let r = proofs[0].verify_range(
