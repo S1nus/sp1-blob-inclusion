@@ -60,11 +60,11 @@ fn main() {
        Explanation:
        I'm currently trying to print values to test interop with solidity.
     */
-    println!("first_row: {:?}", eds_row_roots[first_row_index]);
+    println!("first_row index: {}", first_row_index);
     println!("shares: {:?}", share_values);
     let r = proofs[0].verify_range(
         &eds_row_roots[first_row_index],
-        &share_values[proofs[0].start_idx() as usize..proofs[0].end_idx() as usize]
+        &share_values[0..proofs[0].end_idx() as usize - proofs[0].start_idx() as usize]
             .iter()
             .map(|x| x.to_vec())
             .collect::<Vec<Vec<u8>>>(),
