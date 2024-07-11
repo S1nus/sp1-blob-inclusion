@@ -1,6 +1,7 @@
 use celestia_types::hash::Hash;
 use celestia_types::nmt::NamespacedHashExt;
 use celestia_types::{nmt::Namespace, Blob, Commitment, ExtendedHeader};
+use core::cmp::max;
 use sp1_sdk::{utils, ProverClient, SP1Stdin};
 use std::fs::File;
 use std::io::prelude::*;
@@ -47,7 +48,8 @@ fn main() {
     let share_values: Vec<[u8; 512]> = shares.iter().map(|share| share.data).collect();
 
     let blob_index: usize = blob.index.unwrap().try_into().unwrap();
-    let blob_size: usize = blob.data.len() / 512;
+    // calculate the blob_size, measured in "shares".
+    let blob_size: usize = max(1, blob.data.len() / 512);
     let first_row_index: usize = blob_index / ods_size;
     let last_row_index: usize = first_row_index + (blob_size / ods_size);
 
