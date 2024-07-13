@@ -50,7 +50,7 @@ fn main() {
     let blob_index: usize = blob.index.unwrap().try_into().unwrap();
     // calculate the blob_size, measured in "shares".
     let blob_size: usize = max(1, blob.data.len() / 512);
-    let first_row_index: usize = blob_index / ods_size;
+    let first_row_index: usize = blob_index / eds_size;
     let last_row_index: usize = first_row_index + (blob_size / ods_size);
 
     let proofs_file = File::open("proofs.json").unwrap();
