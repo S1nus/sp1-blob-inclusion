@@ -35,7 +35,7 @@ fn main() {
     assert_eq!(dah.dah.hash(), Hash::Sha256(tree.root()));
 
     // extended data square (EDS) size
-    let eds_size = eds_row_roots.len();
+    let eds_size: u64 = eds_row_roots.len().try_into().unwrap();
     // original data square (ODS) size
     let ods_size = eds_size / 2;
 
@@ -47,20 +47,22 @@ fn main() {
     let shares = blob.to_shares().expect("Failed to split blob to shares");
     let share_values: Vec<[u8; 512]> = shares.iter().map(|share| share.data).collect();
 
-    let blob_index: usize = blob.index.unwrap().try_into().unwrap();
+    let blob_index: u64 = blob.index.unwrap();
     // calculate the blob_size, measured in "shares".
-    let blob_size: usize = max(1, blob.data.len() / 512);
-    let first_row_index: usize = blob_index / eds_size;
-    let last_row_index: usize = first_row_index + (blob_size / ods_size);
+    let blob_size: u64 = max(1, blob.data.len() as u64 / 512);
+    let first_row_index: u64 = blob_index.div_ceil(eds_size) - 1;
+    let ods_index = blob.index.unwrap() - ((first_row_index - 1) * ods_size);
+
+    let last_row_index: u64 = (ods_index + blob_size).div_ceil(ods_size) - 1;
 
     let proofs_file = File::open("proofs.json").unwrap();
     // NMT range proofs, from leaves into row roots.
     let proofs: Vec<celestia_types::nmt::NamespaceProof> =
         serde_json::from_reader(proofs_file).unwrap();
     // For each row spanned by the blob, you should have one NMT range proof into a row root.
-    assert_eq!(proofs.len(), last_row_index + 1 - first_row_index);
+    assert_eq!(proofs.len() as u64, last_row_index - first_row_index);
 
-    let rp = tree.build_range_proof(first_row_index..last_row_index);
+    let rp = tree.build_range_proof(first_row_index as usize..last_row_index as usize);
 
     let mut stdin = SP1Stdin::new();
     // write the DA header
@@ -74,7 +76,7 @@ fn main() {
     // write the range proof
     stdin.write(&rp);
     // write the row roots
-    for row_root in eds_row_roots[first_row_index..last_row_index].iter() {
+    for row_root in eds_row_roots[first_row_index as usize..last_row_index as usize].iter() {
         stdin.write(&row_root);
     }
     // write the shares
