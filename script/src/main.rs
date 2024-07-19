@@ -51,7 +51,7 @@ fn main() {
     // calculate the blob_size, measured in "shares".
     let blob_size: u64 = max(1, blob.data.len() as u64 / 512);
     let first_row_index: u64 = blob_index.div_ceil(eds_size) - 1;
-    let ods_index = blob.index.unwrap() - ((first_row_index - 1) * ods_size);
+    let ods_index = blob.index.unwrap() - (first_row_index * ods_size);
 
     let last_row_index: u64 = (ods_index + blob_size).div_ceil(ods_size) - 1;
 
@@ -60,15 +60,15 @@ fn main() {
     let proofs: Vec<celestia_types::nmt::NamespaceProof> =
         serde_json::from_reader(proofs_file).unwrap();
     // For each row spanned by the blob, you should have one NMT range proof into a row root.
-    assert_eq!(proofs.len() as u64, last_row_index - first_row_index);
+    assert_eq!(proofs.len() as u64, last_row_index + 1 - first_row_index);
 
-    let rp = tree.build_range_proof(first_row_index as usize..last_row_index as usize);
+    let rp = tree.build_range_proof(first_row_index as usize..last_row_index as usize + 1);
 
     let mut stdin = SP1Stdin::new();
     // write the DA header
     stdin.write_vec(dah.dah.hash().as_bytes().to_vec());
     // write "num rows" spanned by the blob
-    stdin.write(&(last_row_index as u32 - first_row_index as u32));
+    stdin.write(&(proofs.len() as u32));
     // write num shares
     stdin.write(&share_values.len());
     // write namespace
@@ -76,7 +76,7 @@ fn main() {
     // write the range proof
     stdin.write(&rp);
     // write the row roots
-    for row_root in eds_row_roots[first_row_index as usize..last_row_index as usize].iter() {
+    for row_root in eds_row_roots[first_row_index as usize..last_row_index as usize + 1].iter() {
         stdin.write(&row_root);
     }
     // write the shares
