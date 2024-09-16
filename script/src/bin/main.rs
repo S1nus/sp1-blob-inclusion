@@ -28,9 +28,9 @@ fn main() {
 
     let (pk, vk) = client.setup(ELF);
     let start_time = std::time::Instant::now();
-    let mut proof = client.prove(&pk, stdin).run().unwrap();
+    let mut proof = client.prove(&pk, stdin).plonk().run().unwrap();
     let elapsed_time = start_time.elapsed();
-    println!("Proof generation took: {:?}", elapsed_time);
+    println!("Plonk proof generation took: {:?}", elapsed_time);
 
     let mut blob_commitment = [0u8; 32];
     proof.public_values.read_slice(&mut blob_commitment);
